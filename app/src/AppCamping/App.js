@@ -119,6 +119,7 @@ class App {
             const tr = document.createElement('tr');
             tr.dataset.id = rental.id;
             tr.dataset.ida = rental.accommodation.id;
+            const isAvailable = rental.accommodation && rental.accommodation.availability;
             tr.innerHTML = `
                 <td>${rental.date_start.split('T')[0]}</td>
                 <td>${rental.date_end.split('T')[0]}</td>
@@ -126,9 +127,9 @@ class App {
                 <td>${rental.accommodation ? rental.accommodation.type.label : ''}</td>
                 <td>${rental.accommodation ? rental.accommodation.location_number : ''}</td>
                 <td>
-                    <select>
-                        <option value="available" ${rental.accommodation && rental.accommodation.availability ? 'selected' : ''}>Yes</option>
-                        <option value="unavailable" ${rental.accommodation && !rental.accommodation.availability ? 'selected' : ''}>No</option>
+                    <select style="color: ${isAvailable ? 'green' : 'red'};">
+                        <option value="available" style="color: green;" ${isAvailable ? 'selected' : ''}>Yes</option>
+                        <option value="unavailable" style="color: red;" ${!isAvailable ? 'selected' : ''}>No</option>
                     </select>
                 </td>
                 <td><button>Mettre à jour</button></td>
@@ -150,6 +151,8 @@ class App {
             const tr = document.createElement('tr');
             tr.dataset.id = rental.id;
             tr.dataset.ida = rental.accommodation.id;
+            const isAvailable = rental.accommodation && rental.accommodation.availability;
+
             tr.innerHTML = `
                 <td>${rental.date_end.split('T')[0]}</td>
                 <td>${rental.date_start.split('T')[0]}</td>
@@ -157,9 +160,9 @@ class App {
                 <td>${rental.accommodation ? rental.accommodation.type.label : ''}</td>
                 <td>${rental.accommodation ? rental.accommodation.location_number : ''}</td>
                 <td>
-                    <select>
-                        <option value="available" ${rental.accommodation && rental.accommodation.availability ? 'selected' : ''}>Yes</option>
-                        <option value="unavailable" ${rental.accommodation && !rental.accommodation.availability ? 'selected' : ''}>No</option>
+                    <select style="color: ${isAvailable ? 'green' : 'red'};">
+                        <option value="available" style="color: green;" ${isAvailable ? 'selected' : ''}>Yes</option>
+                        <option value="unavailable" style="color: red;" ${!isAvailable ? 'selected' : ''}>No</option>
                     </select>
                 </td>
                 <td><button>Mettre à jour</button></td>
@@ -192,17 +195,9 @@ class App {
         elCalendarInput.value = this.selectedDate;
         elCalendarInput.addEventListener('change', (event) => {
             this.selectedDate = event.target.value;
-            this.initCampings();
+            this.renderReservations(); // Directly render reservations after date change
         });
         elDaysContainer.appendChild(elCalendarInput);
-    }
-
-    changeDay(direction) {
-        const currentDate = new Date(this.selectedDate);
-        currentDate.setDate(currentDate.getDate() + direction);
-        this.selectedDate = currentDate.toISOString().split('T')[0];
-        this.displayCurrentDay();
-        this.initCampings();
     }
 }
 
