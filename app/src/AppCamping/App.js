@@ -59,6 +59,7 @@ class App {
                 <th>Date d'arrivée</th>
                 <th>Date de départ</th>
                 <th>Nom</th>
+                <th>Type d'hébergement</th>
                 <th>Emplacement</th>
                 <th>Disponibilité</th>
                 <th>Actions</th>
@@ -79,6 +80,7 @@ class App {
                 <th>Date de départ</th>
                 <th>Date d'arrivée</th>
                 <th>Nom</th>
+                <th>Type d'hébergement</th>
                 <th>Emplacement</th>
                 <th>Disponibilité</th>
                 <th>Actions</th>
@@ -121,6 +123,7 @@ class App {
                 <td>${new Date(rental.date_start).toISOString().split('T')[0]}</td>
                 <td>${new Date(rental.date_end).toISOString().split('T')[0]}</td>
                 <td>${rental.user ? rental.user.firstname : ''} ${rental.user ? rental.user.lastname : ''}</td>
+                <td>${rental.accommodation ? rental.accommodation.type.label : ''}</td>
                 <td>${rental.accommodation ? rental.accommodation.location_number : ''}</td>
                 <td><input type="checkbox" ${rental.status === 'available' ? 'checked' : ''} disabled></td>
                 <td><button>Mettre à jour</button></td>
@@ -135,6 +138,7 @@ class App {
                 <td>${new Date(rental.date_end).toISOString().split('T')[0]}</td>
                 <td>${new Date(rental.date_start).toISOString().split('T')[0]}</td>
                 <td>${rental.user ? rental.user.firstname : ''} ${rental.user ? rental.user.lastname : ''}</td>
+                <td>${rental.accommodation ? rental.accommodation.type.label : ''}</td>
                 <td>${rental.accommodation ? rental.accommodation.location_number : ''}</td>
                 <td><input type="checkbox" ${rental.status === 'available' ? 'checked' : ''} disabled></td>
                 <td><button>Mettre à jour</button></td>
