@@ -1,4 +1,4 @@
-name: <<PROJECT_NAME>>
+name: symfony_js_cd
 
 services:
   # NodeJS
