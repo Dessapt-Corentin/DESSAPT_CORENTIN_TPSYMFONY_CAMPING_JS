@@ -125,7 +125,12 @@ class App {
                 <td>${rental.user ? rental.user.firstname : ''} ${rental.user ? rental.user.lastname : ''}</td>
                 <td>${rental.accommodation ? rental.accommodation.type.label : ''}</td>
                 <td>${rental.accommodation ? rental.accommodation.location_number : ''}</td>
-                <td><input type="checkbox" ${rental.status === 'available' ? 'checked' : ''} disabled></td>
+                <td>
+                    <select>
+                        <option value="available" ${rental.accommodation && rental.accommodation.availability ? 'selected' : ''}>Yes</option>
+                        <option value="unavailable" ${rental.accommodation && !rental.accommodation.availability ? 'selected' : ''}>No</option>
+                    </select>
+                </td>
                 <td><button>Mettre à jour</button></td>
             `;
             elTbodyEntry.appendChild(tr);
@@ -140,7 +145,12 @@ class App {
                 <td>${rental.user ? rental.user.firstname : ''} ${rental.user ? rental.user.lastname : ''}</td>
                 <td>${rental.accommodation ? rental.accommodation.type.label : ''}</td>
                 <td>${rental.accommodation ? rental.accommodation.location_number : ''}</td>
-                <td><input type="checkbox" ${rental.status === 'available' ? 'checked' : ''} disabled></td>
+                <td>
+                    <select>
+                        <option value="available" ${rental.accommodation && rental.accommodation.availability ? 'selected' : ''}>Yes</option>
+                        <option value="unavailable" ${rental.accommodation && !rental.accommodation.availability ? 'selected' : ''}>No</option>
+                    </select>
+                </td>
                 <td><button>Mettre à jour</button></td>
             `;
             elTbodyExit.appendChild(tr);
