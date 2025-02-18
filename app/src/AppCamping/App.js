@@ -1,7 +1,9 @@
 // Import de la feuille de style
 import '../assets/css/style.css';
 
-const RefugeVert_URL = 'http://localhost/api/rentals';
+const CAMPING_URL = 'http://localhost/api/rentals';
+
+const ACCOMODATION_URL = 'http://localhost/api/accommodations';
 
 class App {
 
@@ -24,7 +26,7 @@ class App {
     }
 
     initCampings() {
-        fetch(RefugeVert_URL)
+        fetch(CAMPING_URL)
             .then(response => response.json())
             .then(data => {
                 console.log(data);
@@ -34,6 +36,46 @@ class App {
                 this.renderReservations();
             })
             .catch(error => console.error(error));
+    }
+
+    /**
+     * Méthode pour mettre à jour la disponibilité d'une accommodation
+     * @param {int} id
+     * @param {int} accommodationId
+     * @param {boolean} availability
+     */
+    async updateAccommodationAvailability(id, accommodationId, availability) {
+        const updateData = { availability };
+        console.log("Mise à jour de la disponibilité de l'hébergement :", accommodationId, updateData);
+        try {
+            const response = await fetch(`${ACCOMODATION_URL}/${accommodationId}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/merge-patch+json",
+                },
+                body: JSON.stringify(updateData),
+            });
+
+            if (!response.ok) {
+                throw new Error(`Erreur HTTP! Statut: ${response.status}`);
+            }
+
+            const result = await response.json();
+            console.log("Disponibilité de l'hébergement mise à jour :", result);
+
+            // Mettre à jour les listes locales
+            this.listeEntry = this.listeEntry.map(rental =>
+                rental.id === id ? { ...rental, accommodation: { ...rental.accommodation, availability } } : rental
+            );
+            this.listeExit = this.listeExit.map(rental =>
+                rental.id === id ? { ...rental, accommodation: { ...rental.accommodation, availability } } : rental
+            );
+
+            // Rafraîchir les réservations affichées
+            this.renderReservations();
+        } catch (error) {
+            console.error("Erreur lors de la mise à jour de la disponibilité :", error);
+        }
     }
 
     /**
@@ -119,6 +161,8 @@ class App {
         // Rendu des réservations d'entrée
         this.listeEntry.forEach(rental => {
             const tr = document.createElement('tr');
+            tr.dataset.id = rental.id;
+            tr.dataset.ida = rental.accommodation.id;
             tr.innerHTML = `
                 <td>${new Date(rental.date_start).toISOString().split('T')[0]}</td>
                 <td>${new Date(rental.date_end).toISOString().split('T')[0]}</td>
@@ -133,12 +177,16 @@ class App {
                 </td>
                 <td><button>Mettre à jour</button></td>
             `;
+            const updateButton = tr.querySelector('button');
+            updateButton.addEventListener('click', (event) => this.handlerUpdate(event));
             elTbodyEntry.appendChild(tr);
         });
 
         // Rendu des réservations de sortie
         this.listeExit.forEach(rental => {
             const tr = document.createElement('tr');
+            tr.dataset.id = rental.id;
+            tr.dataset.ida = rental.accommodation.id;
             tr.innerHTML = `
                 <td>${new Date(rental.date_end).toISOString().split('T')[0]}</td>
                 <td>${new Date(rental.date_start).toISOString().split('T')[0]}</td>
@@ -153,8 +201,24 @@ class App {
                 </td>
                 <td><button>Mettre à jour</button></td>
             `;
+            const updateButton = tr.querySelector('button');
+            updateButton.addEventListener('click', (event) => this.handlerUpdate(event));
             elTbodyExit.appendChild(tr);
         });
+    }
+    /**
+     * Gestionnaire de l'événement 'Mettre à jour'
+     * @param {Event} event 
+     */
+    handlerUpdate(event) {
+        const button = event.target;
+        const tr = button.closest('tr');
+        const select = tr.querySelector('select');
+        const availability = select.value === 'available';
+        const id = parseInt(tr.dataset.id, 10);
+        const accommodationId = parseInt(tr.dataset.ida, 10);
+
+        this.updateAccommodationAvailability(id, accommodationId, availability);
     }
 }
 
