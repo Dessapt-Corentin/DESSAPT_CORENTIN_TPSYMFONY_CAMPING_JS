@@ -1,14 +1,11 @@
-# Template de projet webpack
-Un environnement de projet webpack
+DESSAPT_CORENTIN_TPSYMFONY_CAMPING_JS
 
-## Sommaire
-- [Template de projet webpack](#template-de-projet-webpack)
-  - [Sommaire](#sommaire)
-  - [Utilisation](#utilisation)
-
-## Utilisation
-- Lancer le script `init.sh`
-  - S'il n'est pas exécutable :
-    - `chmod +x ./init.sh`
-    - Retenter l'éxécution
 - Démarrer l'environnement : `docker compose up`
+
+Permet de voir les réservations commençant et se terminant trier par jours.
+On peux confirmer qu'un bien est disponible ou non et le rentrer en base de données.
+
+Pour que le projet fonctionne, il est nécessaire de démarrer le projet DESSAPT_CORENTIN_TPSYMFONY_CAMPING qui servira d'api
+
+Credentials
+Port : 8001
